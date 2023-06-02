@@ -141,7 +141,7 @@
      <string>Predict</string>
     </property>
    </widget>
-   <widget class="QComboBox" name="comboBox">
+   <widget class="QComboBox" name="Pclass_box">
     <property name="geometry">
      <rect>
       <x>100</x>
@@ -166,7 +166,7 @@
      </property>
     </item>
    </widget>
-   <widget class="QComboBox" name="comboBox_2">
+   <widget class="QComboBox" name="gender_box">
     <property name="geometry">
      <rect>
       <x>100</x>
@@ -186,7 +186,7 @@
      </property>
     </item>
    </widget>
-   <widget class="QComboBox" name="comboBox_4">
+   <widget class="QComboBox" name="Fare_box">
     <property name="geometry">
      <rect>
       <x>100</x>
@@ -202,7 +202,7 @@
     </item>
     <item>
      <property name="text">
-      <string>middle</string>
+      <string>midium</string>
      </property>
     </item>
     <item>
@@ -281,7 +281,7 @@
      <string>Family Size</string>
     </property>
    </widget>
-   <widget class="QComboBox" name="comboBox_5">
+   <widget class="QComboBox" name="Embarked_box">
     <property name="geometry">
      <rect>
       <x>270</x>
@@ -306,7 +306,7 @@
      </property>
     </item>
    </widget>
-   <widget class="QComboBox" name="comboBox_7">
+   <widget class="QComboBox" name="Title_box">
     <property name="geometry">
      <rect>
       <x>270</x>
@@ -370,7 +370,7 @@
      <string>Title</string>
     </property>
    </widget>
-   <widget class="QComboBox" name="comboBox_8">
+   <widget class="QComboBox" name="Cabin_box">
     <property name="geometry">
      <rect>
       <x>270</x>
