@@ -3,8 +3,8 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 from ui import Ui_MainWindow
 import pandas as pd
 # import cv2
-# from keras.models import load_model
-# default_model = load_model('dnnfortitanic.h5')
+from keras.models import load_model
+default_model = load_model('dnnfortitanic.h5')
 
 def Sex_mapping(data):
     Sex_mapping = {"Male":0,"Female":1}
@@ -22,8 +22,9 @@ def Fare_mapping(data):
     Fare_mapping = {"high":3,"medium":2,"low":1,"beggar":0}
     return data.map(Fare_mapping)
 def predict_result(data):
-    print(data)
-    return 1
+    print(data.items)
+    result = default_model.predict(data).flatten()
+    return result[0]
 
 def user_train():
     return
@@ -36,8 +37,6 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         self.setup_controller()
     def setup_controller(self):
         self.ui.pushButton_3.clicked.connect(self.predict_user)
-        # self.ui.label.setText('die')
-        # self.ui.label.setText('survive')
 
     def predict_user(self):
         Pclass  = self.ui.Pclass_box.currentText()
@@ -48,14 +47,14 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         Embarked= self.ui.Embarked_box.currentText()
         Title   = self.ui.Title_box.currentText()
         Famisize= self.ui.familySizeBox.value()
-        # print(Pclass,Sex,Age,Fare,Cabin,Embarked,Title,Famisize)
+        # print(Pclass,Embarked)
         data = {
-            'Pclass':[Pclass],
+            'Pclass':[int(Pclass)],
             'Sex':[Sex],
             'Age':[Age],
             'Fare':[Fare],
             'Cabin':[Cabin],
-            'Embarked':[Embarked],
+            'Embarked':[int(Embarked)],
             'Title':[Title],
             'FamilySize':[Famisize]
         }
@@ -72,7 +71,11 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         data['FamilySize'] = Family_mapping(data['FamilySize'])
         # print(data)
         result = predict_result(data)
-
+        print(result)
+        if result >= 0.5:
+            self.ui.label.setText('survive')
+        else:
+            self.ui.label.setText('die')
 
     # def display_img(self,result):
     #     self.img = cv2.imread(self.img_path)
