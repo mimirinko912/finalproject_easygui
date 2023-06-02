@@ -35,6 +35,7 @@ if not working, copy and paste ```pyuic5 pyqt_gui.ui -o ui.py``` in your termina
 * ```ui.py``` is the UI file built by QtDesigner.
 
 ## screenshots
-圖片
+![image](https://github.com/mimirinko912/finalproject_easygui/assets/71892273/29b76f0c-b159-4a1c-9565-4926e2f39fda)
+
 
 
