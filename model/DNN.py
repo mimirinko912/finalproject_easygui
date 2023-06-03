@@ -1,8 +1,15 @@
 import pandas as pd
 from sklearn.model_selection import KFold
+from sklearn.multiclass import OneVsRestClassifier
 from sklearn import ensemble
+from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
 import pickle
+
+from keras.models import Sequential
+from keras.layers.core import Dense,Activation
+from keras.optimizers import Adam
+from sklearn import preprocessing
 
 dataset = pd.read_csv('input/titanic.csv')
 
@@ -50,16 +57,25 @@ def data_cleaning(testdata):
     
     return testdata
 
-def display(results):
-    mean_score = results.cv_results_['mean_test_score']
-    std_score = results.cv_results_['std_test_score']
-    params = results.cv_results_['params']
-    for mean,std,params in zip(mean_score,std_score,params):
-        print(f'{round(mean,3)} + or -{round(std,3)} for the {params}')
-    print("\n")
-    print(f'Best parameters are: {results.best_params_}')    
     
-def trainRF():
+def build_model():
+    model = Sequential()
+
+    model.add(Dense(input_dim=8,units=40))            #The number of columns for each data
+    model.add(Activation("relu"))
+    model.add(Dense(units=100))
+    model.add(Activation("relu"))
+    model.add(Dense(units=10))
+    model.add(Activation("relu"))
+    model.add(Dense(units=1))
+    model.add(Activation("sigmoid"))
+    model.summary()
+    return model  
+
+    
+def trainDNN():
+    build_model()
+    
     dataset = pd.read_csv('input/titanic.csv')
     dataset_data = data_cleaning(dataset)
 
@@ -68,39 +84,22 @@ def trainRF():
 
     train_label = dataset[['Survived']]
     dataset_data = dataset_data.drop("Survived", axis = 1)
+    
+    minmax_scale = preprocessing.MinMaxScaler(feature_range = (0,1))
+    scaledFeatures = minmax_scale.fit_transform(dataset_data)
 
-    rfc = ensemble.RandomForestClassifier()
-
-    parameters = {
-        "n_estimators":[5,10,50,100,250],
-        "max_depth":[2,4,8,16,32,None] 
-    }
-
-    from sklearn.model_selection import GridSearchCV
-    cv = GridSearchCV(rfc, parameters, cv=5, verbose=3) # verbose to print out process (higher # = more detail)
-    cv.fit(dataset_data, train_label.values.ravel())
-
-
-        
-    display(cv)
-
-    kfold = KFold(10,shuffle = True)
-
-    for train, test in kfold.split(dataset_data):
-        X_train = dataset_data.iloc[train]
-        Y_train = dataset_target2.iloc[train]
-        # X_test = dataset_data.iloc[test]
-        # Y_test = dataset_target2.iloc[test]
-        forest = ensemble.RandomForestClassifier(
-            max_depth = cv.best_params_['max_depth'], n_estimators = cv.best_params_['n_estimators']
-            )
-        forest.fit(X_train,Y_train.values.ravel())
-
+    model = build_model()
+    model.compile(loss = 'binary_crossentropy', optimizer = 'adam', metrics = ['acc'])
+    model.fit(x = scaledFeatures, y = dataset_target2, validation_split = 0.2, batch_size = 30, epochs = 30)
+    
+    score = model.evaluate (x = scaledFeatures, y = dataset_target2)
+    print ('\nTrain Loss:', score[0])
+    print ('\nTrain Acc:', score[1])
 
     testdata = pd.read_csv('input/test.csv')
     testdata = data_cleaning(testdata)
 
-    survived = forest.predict(testdata)
+    survived = model.predict(testdata).flatten().round(0).astype(int)
     testdata_write = pd.read_csv('input/test.csv')
     answer = pd.read_csv("input/answer_passengerID.csv")
 
@@ -109,15 +108,11 @@ def trainRF():
        "Survived": survived
     })
 
-    submission.to_csv('model/outputRF.csv',index = False)
-
     answer_int = answer[['Survived']]
     submission_int = submission[['Survived']]
     print("\nYour score is: ",accuracy_score(answer_int, submission_int))
     
-    # filename = 'RF_model.sav'
-    filename = r'model/RF_model.sav'
-    pickle.dump(forest, open(filename, 'wb'))
+    model.save('DNN_model.h5')
     
     return accuracy_score(answer_int, submission_int)
 

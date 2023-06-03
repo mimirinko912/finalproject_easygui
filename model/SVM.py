@@ -1,7 +1,7 @@
 import pandas as pd
 from sklearn.model_selection import KFold
 from sklearn.multiclass import OneVsRestClassifier
-from sklearn import ensemble
+# from sklearn import ensemble
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
 import pickle
@@ -50,16 +50,7 @@ def data_cleaning(testdata):
     features_drop = ["Name","Ticket", "SibSp", "Parch", "PassengerId"]
     testdata=testdata.drop(features_drop, axis=1)
     
-    return testdata
-
-def display(results):
-    mean_score = results.cv_results_['mean_test_score']
-    std_score = results.cv_results_['std_test_score']
-    params = results.cv_results_['params']
-    for mean,std,params in zip(mean_score,std_score,params):
-        print(f'{round(mean,3)} + or -{round(std,3)} for the {params}')
-    print("\n")
-    print(f'Best parameters are: {results.best_params_}')    
+    return testdata  
     
 def trainSVM():
     dataset = pd.read_csv('input/titanic.csv')
@@ -68,7 +59,7 @@ def trainSVM():
     dataset_target2 = dataset[['Survived']]
     dataset_data.shape, dataset_target2.shape
 
-    train_label = dataset[['Survived']]
+    # train_label = dataset[['Survived']]
     dataset_data = dataset_data.drop("Survived", axis = 1)
 
     kfold = KFold(10,shuffle = True)
@@ -76,8 +67,8 @@ def trainSVM():
     for train, test in kfold.split(dataset_data):
         X_train = dataset_data.iloc[train]
         Y_train = dataset_target2.iloc[train]
-        X_test = dataset_data.iloc[test]
-        Y_test = dataset_target2.iloc[test]
+        # X_test = dataset_data.iloc[test]
+        # Y_test = dataset_target2.iloc[test]
         svm = OneVsRestClassifier(SVC(gamma='scale')).fit(X_train, Y_train)
 
 
@@ -85,11 +76,11 @@ def trainSVM():
     testdata = data_cleaning(testdata)
 
     survived = svm.predict(testdata).flatten().round(0).astype(int)
-    RF_testdata_write = pd.read_csv('input/test.csv')
+    testdata_write = pd.read_csv('input/test.csv')
     answer = pd.read_csv("input/answer_passengerID.csv")
 
     submission = pd.DataFrame({
-       "PassengerId": RF_testdata_write['PassengerId'],
+       "PassengerId": testdata_write['PassengerId'],
        "Survived": survived
     })
 

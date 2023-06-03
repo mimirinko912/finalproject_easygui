@@ -4,12 +4,15 @@ from ui import Ui_MainWindow
 import pandas as pd
 import cv2
 from keras.models import load_model
-from model import RF, SVM
+from model import RF, SVM, DNN
 import pickle
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent, QMediaPlaylist
 from PyQt5.QtCore import QUrl
 
 default_model = load_model('model/DNN_model.h5')
+scoreSVM = ""
+scoreRF = ""
+scoreDNN = ""
 
 def Sex_mapping(data):
     Sex_mapping = {"Male":0,"Female":1}
@@ -38,6 +41,11 @@ def predict_result_RF(data):
 def predict_result_SVM(data):
     print(data.items)
     default_model = pickle.load(open('model/SVM_model.sav', 'rb'))
+    result = default_model.predict(data).flatten()
+    return result[0]
+def predict_result_DNN(data):
+    print(data.items)
+    default_model = load_model('model/DNN_model.h5')
     result = default_model.predict(data).flatten()
     return result[0]
             
@@ -74,7 +82,9 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         elif self.ui.radioButton_2.isChecked():
             scoreRF = str(RF.trainRF())
             self.ui.label_score.setText(scoreRF)
-            
+        elif self.ui.radioButton_3.isChecked():
+            scoreDNN = str(DNN.trainDNN())
+            self.ui.label_score.setText(scoreDNN)    
 
     def predict_user(self): 
         Pclass  = self.ui.Pclass_box.currentText()
@@ -109,11 +119,14 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         data['FamilySize'] = Family_mapping(data['FamilySize'])
         # print(data)
         if self.ui.radioButton_2.isChecked(): #RF
+            # self.ui.label_score.setText(scoreRF)
             result = predict_result_RF(data)
         elif self.ui.radioButton.isChecked(): #SVM
+            # self.ui.label_score.setText(scoreSVM)
             result = predict_result_SVM(data)
         else:
-            result = predict_result(data) #DNN
+            result = predict_result_DNN(data) #DNN
+            # self.ui.label_score.setText(scoreDNN)
             
         print(result)
         if result >= 0.5:
