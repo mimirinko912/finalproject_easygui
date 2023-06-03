@@ -292,7 +292,7 @@ class Ui_MainWindow(object):
         self.gender_box.setItemText(0, _translate("MainWindow", "Male"))
         self.gender_box.setItemText(1, _translate("MainWindow", "Female"))
         self.Fare_box.setItemText(0, _translate("MainWindow", "high"))
-        self.Fare_box.setItemText(1, _translate("MainWindow", "midium"))
+        self.Fare_box.setItemText(1, _translate("MainWindow", "medium"))
         self.Fare_box.setItemText(2, _translate("MainWindow", "low"))
         self.Fare_box.setItemText(3, _translate("MainWindow", "beggar"))
         self.Pclass.setText(_translate("MainWindow", "Pclass"))

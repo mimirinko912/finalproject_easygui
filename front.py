@@ -4,7 +4,7 @@ from ui import Ui_MainWindow
 import pandas as pd
 import cv2
 from keras.models import load_model
-from model import RF
+from model import RF, SVM
 import pickle
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent, QMediaPlaylist
 from PyQt5.QtCore import QUrl
@@ -33,6 +33,11 @@ def predict_result(data):
 def predict_result_RF(data):
     print(data.items)
     default_model = pickle.load(open('model/RF_model.sav', 'rb'))
+    result = default_model.predict(data).flatten()
+    return result[0]
+def predict_result_SVM(data):
+    print(data.items)
+    default_model = pickle.load(open('model/SVM_model.sav', 'rb'))
     result = default_model.predict(data).flatten()
     return result[0]
             
@@ -64,7 +69,8 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         
     def train_user(self):
         if self.ui.radioButton.isChecked():
-            print("SVM")
+            scoreSVM = str(SVM.trainSVM())
+            self.ui.label_score.setText(scoreSVM)
         elif self.ui.radioButton_2.isChecked():
             scoreRF = str(RF.trainRF())
             self.ui.label_score.setText(scoreRF)
@@ -105,7 +111,7 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         if self.ui.radioButton_2.isChecked(): #RF
             result = predict_result_RF(data)
         elif self.ui.radioButton.isChecked(): #SVM
-            result = predict_result(data)
+            result = predict_result_SVM(data)
         else:
             result = predict_result(data) #DNN
             
