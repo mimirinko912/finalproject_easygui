@@ -15,14 +15,8 @@ click **predict**, to get the result from our **pre-trained model**.
 you can also build a model clicking **train**, system will build a model with the type you choosed.
 
 ## requirement
-
-* PyQt5
-* qt-material
-* keras
-* opencv-python
-* pickle
-* pandas
-* scikit-learn...
+python 3.9.15 (not necessary)
+``` pip install -r requirements.txt ```
 
 ## how to build
 after finishing designing UI in QtDesigner, run the ```make_ui.bat``` to build the ```ui.py```.

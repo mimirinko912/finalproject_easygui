@@ -9,7 +9,7 @@ import pickle
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent, QMediaPlaylist
 from PyQt5.QtCore import QUrl
 
-default_model = load_model('dnnfortitanic.h5')
+default_model = load_model('model/DNN_model.h5')
 
 def Sex_mapping(data):
     Sex_mapping = {"Male":0,"Female":1}
@@ -32,7 +32,7 @@ def predict_result(data):
     return result[0]
 def predict_result_RF(data):
     print(data.items)
-    default_model = pickle.load(open('RF_model.sav', 'rb'))
+    default_model = pickle.load(open('model/RF_model.sav', 'rb'))
     result = default_model.predict(data).flatten()
     return result[0]
             
@@ -68,7 +68,7 @@ class MainWindow_controller(QtWidgets.QMainWindow):
         elif self.ui.radioButton_2.isChecked():
             scoreRF = str(RF.trainRF())
             self.ui.label_score.setText(scoreRF)
-            # default_model = pickle.load(open('RF_model.sav', 'rb'))
+            
 
     def predict_user(self): 
         Pclass  = self.ui.Pclass_box.currentText()

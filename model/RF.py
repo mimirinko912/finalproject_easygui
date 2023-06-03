@@ -115,7 +115,8 @@ def trainRF():
     submission_int = submission[['Survived']]
     print("\nYour score is: ",accuracy_score(answer_int, submission_int))
     
-    filename = 'RF_model.sav'
+    # filename = 'RF_model.sav'
+    filename = r'model/RF_model.sav'
     pickle.dump(forest, open(filename, 'wb'))
     
     return accuracy_score(answer_int, submission_int)
