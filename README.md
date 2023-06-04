@@ -1,7 +1,5 @@
 # NCU Introduction to programming skills for artificial intelligence 2023
-
-## finalproject_easygui
-pyQT powered GUI
+finalproject_easygui pyQT powered GUI
 
 ## guide
 run ```start.py``` , after the GUI shows up, simply key in data and values, and select the model you like.
