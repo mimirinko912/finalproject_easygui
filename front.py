@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5 import QtWidgets
 from PyQt5.QtGui import QImage, QPixmap
 from ui import Ui_MainWindow
 import pandas as pd

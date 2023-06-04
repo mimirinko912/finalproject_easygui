@@ -1,7 +1,6 @@
 import pandas as pd
 from sklearn.model_selection import KFold
 from sklearn.multiclass import OneVsRestClassifier
-# from sklearn import ensemble
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
 import pickle
