@@ -85,7 +85,7 @@ def trainDNN():
 
     model = build_model()
     model.compile(loss = 'binary_crossentropy', optimizer = 'adam', metrics = ['acc'])
-    model.fit(x = scaledFeatures, y = dataset_target2, validation_split = 0.2, batch_size = 30, epochs = 30)
+    model.fit(x = dataset_data, y = dataset_target2, validation_split = 0.2, batch_size = 30, epochs = 40)
     
     score = model.evaluate (x = scaledFeatures, y = dataset_target2)
     print ('\nTrain Loss:', score[0])
